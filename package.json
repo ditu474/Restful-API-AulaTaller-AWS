@@ -30,9 +30,6 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "prettier": "^2.0.5"
   },
-  "engines": {
-    "node": "^12"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
