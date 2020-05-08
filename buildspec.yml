@@ -1,9 +1,9 @@
-version: Sample Application
+version: 0.2
 
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: Sample Application
     commands:
       - npm install
       # Upgrade AWS CLI to the latest version
