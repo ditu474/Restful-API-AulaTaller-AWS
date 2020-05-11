@@ -34,7 +34,10 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
-    res.status(err.statusCode).send(err.message || err.info);
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message || err.info,
+    });
   } else {
     console.error("ERROR 💥", err);
     res.status(500).send("Algo va mal en el servidor");
