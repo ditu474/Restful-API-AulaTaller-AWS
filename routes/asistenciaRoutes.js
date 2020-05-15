@@ -1,13 +1,13 @@
-const express = require('express');
-const asistenciaController = require('../controllers/asistenciaController');
-const authController = require('../controllers/authController');
+const express = require("express");
+const asistenciaController = require("../controllers/asistenciaController");
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
 router.use(authController.protect);
 
 router
-  .route('/')
+  .route("/")
   .post(
     asistenciaController.validarServicioRol,
     asistenciaController.setServicioId,
@@ -15,13 +15,13 @@ router
     asistenciaController.createAsistencia
   );
 
-router.route('/me').get(asistenciaController.getMisAsistencias);
+router.route("/me").get(asistenciaController.getMisAsistencias);
 
-router.use(authController.restrictTo('admin'));
+router.use(authController.restrictTo("admin"));
 
-router.route('/').get(asistenciaController.getAllAsistencia);
+router.route("/").get(asistenciaController.getAllAsistencia);
 router
-  .route('/:id')
+  .route("/:id")
   .get(asistenciaController.getAsistencia)
   .patch(asistenciaController.updateAsistencia)
   .delete(asistenciaController.deleteAsistencia);

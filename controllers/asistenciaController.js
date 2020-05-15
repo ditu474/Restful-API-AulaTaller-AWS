@@ -27,7 +27,7 @@ exports.setServicioId = catchAsync(async (req, res, next) => {
     return next(
       new AppError("No se encontro Servicio con el codigo ingresado", 400)
     );
-  const date = new Date(Date.now()).toLocaleString("en-US", {
+  const date = Date(Date.now()).toLocaleString("en-US", {
     timeZone: "America/Bogota",
   });
   const dia = new Date(date);
@@ -41,6 +41,7 @@ exports.setServicioId = catchAsync(async (req, res, next) => {
   //Calculo horas asistencia
   req.body.tiempoPermanencia = servicio.horaFinal - servicio.horaInicio;
   req.body.idServicio = servicio["_id"];
+  req.body.fecha = dia;
 
   if (!req.body.idUsuario) req.body.idUsuario = req.user.id;
 
@@ -92,10 +93,11 @@ exports.validarUltimaVisita = catchAsync(async (req, res, next) => {
   if (
     user.lastVisit &&
     Date.parse(user.lastVisit) + 60 * 60 * 1000 >= Date.now()
-  )
+  ) {
     return next(
       new AppError("Solo puedes registrar una asistencia cada hora", 400)
     );
+  }
   user.lastVisit = Date.now();
   await user.save({ validateBeforeSave: false });
   next();
