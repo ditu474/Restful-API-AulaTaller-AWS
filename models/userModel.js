@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'El nombre es requerido'],
     validate: {
       validator: function (val) {
-        var re = /^[a-zA-Zñ]+(([',. -][a-zA-Zñ ])?[a-zA-Zñ]*)*$/;
+        var re = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/;
         return re.test(val);
       },
       message: 'El nombre no debe contener caracteres especiales',
