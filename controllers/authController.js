@@ -1,4 +1,3 @@
-const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
@@ -33,7 +32,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.singup = catchAsync(async (req, res, next) => {
+exports.singUp = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     nombre: req.body.nombre,
     tipoDocumento: req.body.tipoDocumento,
@@ -64,52 +63,6 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   createSendToken(user, 200, res);
 });
-
-exports.protect = catchAsync(async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
-  }
-
-  if (!token) {
-    return next(new AppError('No estas logueado', 401));
-  }
-
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
-  const currentUser = await User.findById(decoded.id);
-  if (!currentUser) {
-    return next(
-      new AppError('No existe un usuario registrado con este token.', 401)
-    );
-  }
-
-  if (currentUser.changedPasswordAfter(decoded.iat)) {
-    next(
-      new AppError(
-        'El usuario recientemente cambio la clave, logueese de nuevo.',
-        401
-      )
-    );
-  }
-
-  req.user = currentUser;
-  next();
-});
-
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.rol)) {
-      return next(
-        new AppError('No tienes permisos para realizar esta accion', 403)
-      );
-    }
-    next();
-  };
-};
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ correo: req.body.correo });

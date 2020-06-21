@@ -4,60 +4,49 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
-  nombre: {
+  name: {
     type: String,
-    required: [true, 'El nombre es requerido'],
-    validate: {
-      validator: function (val) {
-        var re = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/;
-        return re.test(val);
-      },
-      message: 'El nombre no debe contener caracteres especiales',
-    },
+    required: true
   },
-  tipoDocumento: {
+  typeOfDocument: {
     type: String,
-    required: [true, 'El tipo de documento es requerido'],
+    required: true,
     enum: {
-      values: ['TI', 'CC', 'CE', 'Pasaporte'],
-      message: 'El tipo de documento debe ser TI, CC, CE, Pasaporte',
+      values: ['TI', 'CC', 'CE', 'Pasaporte']
     },
-    default: 'CC',
+    default: 'CC'
   },
-  documento: {
+  document: {
     type: String,
     unique: true,
-    minlength: [7, 'Un documento valido debe tener minimo 7 caracteres'],
-    maxlength: [15, 'Un documento valido debe tener maximo 15 caracteres'],
-    required: [true, 'Ingresa tu numero de documento'],
-    validate: [validator.isAlphanumeric, 'Documento Invalido'],
+    minlength: 8,
+    maxlength: 15,
+    required: true
   },
-  correo: {
+  email: {
     type: String,
-    required: [true, 'El correo es requerido'],
+    required: true,
     unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Correo invalido'],
+    lowercase: true
   },
-  rol: {
+  role: {
+    type: String,
+    required: true,
+    enum: {
+      values: ['Docente', 'Estudiante', 'Externo']
+    },
+    default: 'Estudiante',
+  },
+  campus: {
     type: String,
     enum: {
-      values: ['docente', 'estudiante', 'externo'],
-      message: 'Rol invalido',
-    },
-    default: 'estudiante',
-  },
-  sede: {
-    type: String,
-    enum: {
-      values: ['medellin', 'oriente', 'uraba'],
-      message: 'La sede debe ser medellin, oriente, uraba',
+      values: ['Medellin', 'Oriente', 'Uraba'],
     },
   },
-  programaAcademico: {
+  academicProgram: {
     type: String,
   },
-  semestre: {
+  semester: {
     type: Number,
     validate: {
       validator: function (val) {
@@ -75,7 +64,7 @@ const userSchema = new mongoose.Schema({
     minlength: [8, 'La contraseña debe contener 8 caracteres minimo'],
     select: false,
   },
-  passwordConfirm: {
+  confirmPassword: {
     type: String,
     required: [true, 'Porfavor confirme su contraseña'],
     validate: {

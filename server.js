@@ -7,7 +7,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 
 const app = require("./app");
 
@@ -23,11 +23,11 @@ mongoose
     useFindAndModify: false,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("DB Connection Successfull"))
+  .then(() => console.log("Conexion a la DB correcta"))
   .catch((err) => console.log(err));
 
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => console.log(`Running on port ${port}`));
+const server = app.listen(port, () => console.log(`Servidor activo en puerto ${port}`));
 
 process.on("unhandledRejection", (err) => {
   console.log(err.name, err.message);

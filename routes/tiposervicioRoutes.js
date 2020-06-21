@@ -1,14 +1,14 @@
 const express = require('express');
 const tiposervicioController = require('../controllers/tiposervicioController');
-const authController = require('../controllers/authController');
+const protectRoutes = require("../middlewares/protectRoutes");
 
 const router = express.Router();
 
-router.use(authController.protect);
+router.use(protectRoutes.verifyToken);
 
 router.route('/').get(tiposervicioController.getAllTipoServicio);
 
-router.use(authController.restrictTo('admin'));
+router.use(protectRoutes.restrictTo('admin'));
 
 router.route('/').post(tiposervicioController.createTipoServicio);
 router

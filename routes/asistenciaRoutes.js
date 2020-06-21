@@ -1,10 +1,10 @@
 const express = require("express");
 const asistenciaController = require("../controllers/asistenciaController");
-const authController = require("../controllers/authController");
+const protectRoutes = require("../middlewares/protectRoutes");
 
 const router = express.Router();
 
-router.use(authController.protect);
+router.use(protectRoutes.verifyToken);
 
 router
   .route("/")
@@ -14,10 +14,9 @@ router
     asistenciaController.validarUltimaVisita,
     asistenciaController.createAsistencia
   );
-
 router.route("/me").get(asistenciaController.getMisAsistencias);
 
-router.use(authController.restrictTo("admin"));
+router.use(protectRoutes.restrictTo("admin"));
 
 router.route("/").get(asistenciaController.getAllAsistencia);
 router

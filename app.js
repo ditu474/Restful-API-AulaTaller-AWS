@@ -15,6 +15,7 @@ const asignaturaRouter = require("./routes/asignaturaRoutes");
 const servicioRouter = require("./routes/servicioRoutes");
 const asistenciaRouter = require("./routes/asistenciaRoutes");
 const valoracionRouter = require("./routes/valoracionRoutes");
+const authRouter = require("./routes/authRoutes");
 
 const app = express();
 
@@ -27,7 +28,7 @@ if (process.env.NODE_ENV === "development") {
 const limiter = rateLimit({
   max: 200,
   windowMs: 60 * 60 * 1000,
-  message: "Maximo de peticiones, intenta de nuevo en una hora",
+  message: "Haz sido bloqueado por el servidor, intenta de nuevo en una hora",
 });
 app.use("/", limiter);
 app.use(express.json({ limit: "10kb" }));
@@ -35,6 +36,7 @@ app.use(mongoSanitize());
 app.use(xss());
 app.use(compression());
 
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tiposervicio", tiposervicioRouter);
 app.use("/api/v1/asignaturas", asignaturaRouter);
