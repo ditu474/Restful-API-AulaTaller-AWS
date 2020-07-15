@@ -53,12 +53,15 @@ const userSchema = new mongoose.Schema({
       values: ['medellin', 'oriente', 'uraba'],
       message: 'La sede debe ser medellin, oriente, uraba',
     },
+    required: false,
   },
   programaAcademico: {
     type: String,
+    required: false,
   },
   semestre: {
     type: Number,
+    required: false,
     validate: {
       validator: function (val) {
         var re = /^[0-9]*$/;
@@ -110,7 +113,11 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
+  this.find({
+    active: {
+      $ne: false
+    }
+  });
   next();
 });
 
