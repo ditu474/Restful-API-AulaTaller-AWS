@@ -40,10 +40,7 @@ const userSchema = new mongoose.Schema({
   },
   sede: {
     type: String,
-    enum: {
-      values: ['medellin', 'oriente', 'uraba'],
-      message: 'La sede debe ser medellin, oriente, uraba',
-    },
+    required: false,
   },
   programaAcademico: {
     type: String,
