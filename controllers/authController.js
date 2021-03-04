@@ -21,7 +21,9 @@ const createSendToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  if (process.env.NODE_ENV === 'production') {
+    cookieOptions.secure = true;
+  }
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
   res.status(statusCode).json({
@@ -34,7 +36,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.singup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  const reqObj = {
     nombre: req.body.nombre,
     tipoDocumento: req.body.tipoDocumento,
     documento: req.body.documento,
@@ -45,7 +47,8 @@ exports.singup = catchAsync(async (req, res, next) => {
     semestre: req.body.semestre,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-  });
+  };
+  const newUser = await User.create(reqObj);
 
   createSendToken(newUser, 201, res);
 });

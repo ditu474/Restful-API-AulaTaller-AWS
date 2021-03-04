@@ -7,13 +7,6 @@ const userSchema = new mongoose.Schema({
   nombre: {
     type: String,
     required: [true, 'El nombre es requerido'],
-    validate: {
-      validator: function (val) {
-        var re = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/;
-        return re.test(val);
-      },
-      message: 'El nombre no debe contener caracteres especiales',
-    },
   },
   tipoDocumento: {
     type: String,
@@ -22,11 +15,9 @@ const userSchema = new mongoose.Schema({
       values: ['TI', 'CC', 'CE', 'Pasaporte'],
       message: 'El tipo de documento debe ser TI, CC, CE, Pasaporte',
     },
-    default: 'CC',
   },
   documento: {
     type: String,
-    unique: true,
     minlength: [7, 'Un documento valido debe tener minimo 7 caracteres'],
     maxlength: [15, 'Un documento valido debe tener maximo 15 caracteres'],
     required: [true, 'Ingresa tu numero de documento'],
@@ -41,11 +32,11 @@ const userSchema = new mongoose.Schema({
   },
   rol: {
     type: String,
+    required: [true, 'Debes especificar un rol'],
     enum: {
       values: ['docente', 'estudiante', 'externo'],
       message: 'Rol invalido',
     },
-    default: 'estudiante',
   },
   sede: {
     type: String,
@@ -53,22 +44,12 @@ const userSchema = new mongoose.Schema({
       values: ['medellin', 'oriente', 'uraba'],
       message: 'La sede debe ser medellin, oriente, uraba',
     },
-    required: false,
   },
   programaAcademico: {
     type: String,
-    required: false,
   },
   semestre: {
     type: Number,
-    required: false,
-    validate: {
-      validator: function (val) {
-        var re = /^[0-9]*$/;
-        return re.test(val);
-      },
-      message: 'El semestre debe ser un numero entero entre 1 y 10',
-    },
     min: [1, 'El semestre es minimo 1'],
     max: [10, 'El semestre maximo es 10'],
   },
@@ -115,8 +96,8 @@ userSchema.pre('save', function (next) {
 userSchema.pre(/^find/, function (next) {
   this.find({
     active: {
-      $ne: false
-    }
+      $ne: false,
+    },
   });
   next();
 });

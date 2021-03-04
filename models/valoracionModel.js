@@ -1,34 +1,34 @@
-const mongoose = require("mongoose");
-const Asistencia = require("./asistenciaModel");
+const mongoose = require('mongoose');
+const Asistencia = require('./asistenciaModel');
 
 const valoracionSchema = mongoose.Schema({
   idAsistencia: {
     type: mongoose.Schema.ObjectId,
-    ref: "Asistencia",
-    required: [true, "La valoracion debe estar relacionada con una asistencia"],
+    ref: 'Asistencia',
+    required: [true, 'La valoracion debe estar relacionada con una asistencia'],
     unique: true,
   },
   idUsuario: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "La valoracion debe tener un usuario relacionado"],
+    ref: 'User',
+    required: [true, 'La valoracion debe tener un usuario relacionado'],
   },
   valoracion: {
     type: Number,
-    min: [1, "la puntuacion minima es 1"],
-    max: [10, "la puntuacion maxima es 10"],
-    required: [true, "La valoracion debe tener un valor"],
+    min: [1, 'la puntuacion minima es 1'],
+    max: [10, 'la puntuacion maxima es 10'],
+    required: [true, 'La valoracion debe tener un valor'],
   },
   detalle: {
     type: String,
-    maxlength: [200, "Un detalle no debe contener mas de 200 caracteres"],
+    maxlength: [200, 'Un detalle no debe contener mas de 200 caracteres'],
   },
   fecha: {
     type: Date,
   },
 });
 
-valoracionSchema.pre("save", async function (next) {
+valoracionSchema.pre('save', async function (next) {
   let asistencia = await Asistencia.findById(this.idAsistencia).catch((err) =>
     next(
       new AppError(
@@ -44,12 +44,12 @@ valoracionSchema.pre("save", async function (next) {
 
 valoracionSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "idAsistencia",
-    select: ["idServicio", "fecha"],
+    path: 'idAsistencia',
+    select: ['idServicio', 'fecha'],
   });
   next();
 });
 
-const Valoracion = mongoose.model("Valoracion", valoracionSchema);
+const Valoracion = mongoose.model('Valuation', valoracionSchema);
 
 module.exports = Valoracion;
